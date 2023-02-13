@@ -17,5 +17,6 @@ class BestRepliesController extends Controller
         $this->authorize('update', $reply->thread);
 
         $reply->thread->markBestReply($reply);
+
     }
 }
