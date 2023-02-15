@@ -4,6 +4,7 @@ namespace App;
 
 use App\Events\ThreadReceivedNewReply;
 use App\Filters\ThreadFilters;
+use App\Reputation;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
@@ -52,6 +53,8 @@ class Thread extends Model
 
         static::deleting(function ($thread) {
             $thread->replies->each->delete();
+
+            Reputation::reduce($thread->creator, Reputation::THREAD_WAS_PUBLISHED);
         });
 
         static::created(function ($thread) {
