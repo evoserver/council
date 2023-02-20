@@ -49,20 +49,27 @@
 </style>
 
 <script>
-export default {
-  props: ['channels'],
-  data() {
-    return {
-      toggle: false,
-      filter: ''
-    };
-  },
-  computed: {
-    filteredThreads() {
-      return this.channels.filter(channel => {
-        return channel.name.toLowerCase().startsWith(this.filter.toLocaleLowerCase())
-      });
+  export default {
+    data() {
+      return {
+        channels: [],
+        toggle: false,
+        filter: ''
+      };
+    },
+
+    created() {
+      axios.get('api/channels').then(({ data }) => (this.channels = data));
+    },
+
+    computed: {
+      filteredChannels() {
+        return this.channels.filter(channel => {
+          return channel.name
+              .toLowerCase().
+              startsWith(this.filter.toLocaleLowerCase());
+        });
+      }
     }
-  }
-}
+  };
 </script>

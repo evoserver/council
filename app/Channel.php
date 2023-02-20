@@ -8,6 +8,20 @@ class Channel extends Model
 {
     protected $guarded = [];
 
+    protected $casts = [
+        'archived' => 'boolean'
+    ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('active', function($builder) {
+            $builder->where('archived', false)
+                ->orderBy('name', 'asc');
+        });
+    }
+
     /**
      * Get the route key name for Laravel.
      *
@@ -26,5 +40,32 @@ class Channel extends Model
     public function threads()
     {
         return $this->hasMany(Thread::class);
+    }
+
+    /**
+     * Archive the channel.
+     */
+    public function archive()
+    {
+        $this->update(['archived' => true]);
+    }
+
+    /**
+     * Set the name of the channel.
+     *
+     * @param string $name
+     */
+    public function setNameAttribute($name)
+    {
+        $this->attributes['name'] = $name;
+        $this->attributes['slug'] = str_slug($name);
+    }
+
+    /**
+     * Get a new query builder that includes archives.
+     */
+    public static function withArchived()
+    {
+        return (new static)->newQueryWithoutScope('active');
     }
 }

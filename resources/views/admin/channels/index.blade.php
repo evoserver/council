@@ -6,20 +6,24 @@
 
     <table class="table">
         <thead>
-        <tr>
-            <th>Name</th>
-            <th>Slug</th>
-            <th>Description</th>
-            <th>Threads</th>
-        </tr>
+            <tr>
+                <th>Name</th>
+                <th>Slug</th>
+                <th>Description</th>
+                <th>Threads</th>
+                <th>Action</th>
+            </tr>
         </thead>
         <tbody>
         @forelse($channels as $channel)
-            <tr>
+            <tr class="{{ $channel->archived ? 'info' : '' }}">
                 <td>{{$channel->name}}</td>
                 <td>{{$channel->slug}}</td>
                 <td>{{$channel->description}}</td>
-                <td>{{ count($channel->threads()) }}</td>
+                <td>{{$channel->threads()->count()}}</td>
+                <td>
+                    <a href="{{ route('admin.channels.edit', ['channel' => $channel->slug]) }}" class="btn btn-default btn-xz">Edit</a>
+                </td>
             </tr>
         @empty
             <tr>
