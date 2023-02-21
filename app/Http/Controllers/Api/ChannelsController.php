@@ -12,8 +12,12 @@ class ChannelsController extends Controller
      */
     public function index()
     {
-        return cache()->rememberForever('channels', function () {
-            return Channel::all();
+            $channels = Channel::withoutGlobalScopes()->orderBy('name', 'asc')
+                                    ->withCount('threads')->get();
+
+            return view('admin.channels.index', compact('channels'));
+//        return cache()->rememberForever('channels', function () {
+//            return Channel::all();
         });
     }
 }

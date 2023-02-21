@@ -61,3 +61,11 @@
         }
     }
 </script>
+
+<style scoped>
+.new-reply {
+  padding: 15px;
+  background-color: #fff;
+  border: 1px solid #e3e3e3;
+}
+</style>
